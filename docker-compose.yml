@@ -1,0 +1,42 @@
+version: '3.1'
+services:
+    # mongo:
+    #     image: mongo
+    #     restart: always
+    #     environment:
+    #       MONGO_INITDB_ROOT_USERNAME: root
+    #       MONGO_INITDB_ROOT_PASSWORD: 24plus
+    #     ports:
+    #       - 27018:27017
+    #     volumes:
+    #       - ./prod-data:/data/db
+    #     networks:
+    #       - 24hplus-prod
+    24plus-server:
+        build: .
+        restart: always
+        ports:
+          - 7950:443
+          - 7910:80
+        environment:
+          ASPNETCORE_ENVIRONMENT: Production
+          ASPNETCORE_URLS: https://+:443;http://+:80
+          ASPNETCORE_Kestrel__Certificates__Default__Password: f0c346c779fa39b102001c5c90b5a449
+          ASPNETCORE_Kestrel__Certificates__Default__Path: /app/mobileapp/ssl/certificate.pfx
+          # MongoDB__Host: mongo
+        # depends_on:
+        #   - mongo
+        volumes:
+          - ./mobileapp:/app/mobileapp
+          - ./logs:/app/logs
+          - ./FileUpload:/app/FileUpload
+        networks:
+          - 24hplus-prod
+    # system-prune:
+    #     image: docker
+    #     volumes:
+    #       - "/var/run/docker.sock:/var/run/docker.sock"
+    #     command: docker system prune --all --force
+networks:
+    24hplus-prod:
+        external: true

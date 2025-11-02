@@ -1,0 +1,1 @@
+docker-compose -f docker-compose.stag.yml build && docker-compose -f docker-compose.stag.yml up  -d
